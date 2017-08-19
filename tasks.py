@@ -31,17 +31,17 @@ class hue_copy_aws(luigi.Task):
             
 # Task to parse relevant fields and merge a week of data
 class hue_merge_weekly_aws(luigi.Task):
-    date = luigi.DateParameter(default = (date(2017, 5, 12))
+    date1 = luigi.DateParameter(default = date(2017, 5, 12))
     date2 = luigi.DateParameter(default = date.today())
     daterange = luigi.IntParameter((date.today()-date(2017, 5, 12)).days)
 
     def requires(self):
-        return [hue_copy_aws(i) for i in [self.date + timedelta(x) for x in range(self.daterange)]]
+        return [hue_copy_aws(i) for i in [self.date1 + timedelta(x) for x in range(self.daterange)]]
         
     def output(self):
         client = S3Client(host = 's3.us-east-2.amazonaws.com')
         return S3Target('s3://ams-hue-data/hue_full_%s.json' % 
-                        (self.date2.strftime('%Y-%m-%d'), client=client)
+                        self.date2.strftime('%Y-%m-%d'), client=client)
     
     def run(self):
         results = []
@@ -54,3 +54,6 @@ class hue_merge_weekly_aws(luigi.Task):
                     
         with self.output().open('w') as out_file:
             json.dump(results, out_file)
+
+if __name__ == '__main__':
+    luigi.run()
