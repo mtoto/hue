@@ -28,8 +28,8 @@ def json_parser(file):
             res = lamp_name + lamp_state
             d = { k: v for d in res for k, v in d.items() }
 
-            d = dict(d, **lamp_log)
-            d.update(lamp_log)
-            result.append(d)
+        d = dict(d, **lamp_log)
+        d.update(lamp_log)
+        result.append(d)
         
     return result
