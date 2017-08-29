@@ -4,6 +4,7 @@ import json
 from luigi.s3 import S3Target, S3Client
 from datetime import date, timedelta
 from functions import *
+import subprocess
 
 class hue_raw_json(luigi.ExternalTask):
     date = luigi.DateParameter(default = date.today()-timedelta(1)) 
@@ -54,6 +55,27 @@ class hue_merge_weekly_aws(luigi.Task):
                     
         with self.output().open('w') as out_file:
             json.dump(results, out_file)
+            
+class hue_run_save_model(luigi.Task):
+    date = luigi.DateParameter(default = date.today()) 
+    
+    def requires(self):
+        return self.clone(hue_merge_weekly_aws)
+
+    def output(self):
+        client = S3Client(host = 's3.us-east-2.amazonaws.com')
+        return S3Target('s3://ams-hue-data/gbmFit_%s.rds' % 
+                        self.date.strftime(
+                '%Y-%m-%d'), 
+                        client=client)
+    
+        return S3Target('s3://ams-hue-data/for_sample_%s.rds' % 
+                        self.date.strftime('%Y-%m-%d'), 
+                        client=client)
+
+    def run(self):  
+        subprocess.call('Rscript etl.R',shell=True)
+        
 
 if __name__ == '__main__':
     luigi.run()
