@@ -1,6 +1,7 @@
 library(aws.s3)
 library(dplyr)
 library(jug)
+source('/home/pi/home_iot/hue/functions.R')
 
 aws.signature::use_credentials()
 
