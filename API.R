@@ -3,7 +3,7 @@ library(dplyr)
 library(jug)
 
 # Expose model stored on S3 as a prediction API
-gbmFit<-s3readRDS(paste0("gbmfit_",Sys.Date(),".rds"), 
+gbmFit<-s3readRDS(paste0("gbmFit_",Sys.Date(),".rds"), 
                  bucket = "ams-hue-data")
 
 for_sample <- s3readRDS(paste0("for_sample_",Sys.Date(),".rds"), 
