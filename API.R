@@ -1,3 +1,4 @@
+#!/usr/bin/env Rscript
 library(aws.s3)
 library(dplyr)
 library(jug)
