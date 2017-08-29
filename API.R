@@ -2,6 +2,8 @@ library(aws.s3)
 library(dplyr)
 library(jug)
 
+aws.signature::use_credentials()
+
 # Expose model stored on S3 as a prediction API
 gbmFit<-s3readRDS(paste0("gbmFit_",Sys.Date(),".rds"), 
                  bucket = "ams-hue-data")
