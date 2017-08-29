@@ -1,6 +1,11 @@
 import json
 import os
+import time
+import requests
 from collections import Counter, defaultdict
+from creds import url_hue
+
+s = 0
 
 # Convert json to a list of dicts
 def json_parser(file):
@@ -33,3 +38,45 @@ def json_parser(file):
         result.append(d)
         
     return result
+
+def get_prediction(timestamp):
+    
+    url = 'http://127.0.0.1:8080/predict-hue'
+    headers ={'content-type':'application/json'}
+    data = {"timestamp": str(timestamp)}
+
+    response = requests.post(url, headers = headers,
+                            params = data)
+    
+    return int(response.content)
+
+def api_comms(timestamp):
+    
+    urls = [url_hue + "/1/state",url_hue + "/2/state"]
+    n = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    n1 = datetime.datetime.now().strftime("%Y-%m-%d")
+
+    
+    filename = 'pred_log_%s.json' % n1
+
+    pred = get_prediction(timestamp)
+    
+    if (pred == 0):
+        on = False
+        bri = 0
+    else:
+        on = True
+        bri = pred
+        
+    data = {'on': on, 'bri' : bri}
+
+    def response(url):
+        response = requests.put(url,data = json.dumps(data))
+        return response.content
+
+    l = [response(i) for i in urls]
+    l.append(n)
+    
+    with open(filename, 'a') as f:
+        json.dump(l, f)
+        f.write('\n')
