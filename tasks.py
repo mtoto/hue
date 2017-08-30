@@ -1,4 +1,3 @@
-# Luigi task to write clean files to aws
 import luigi
 import json
 from luigi.s3 import S3Target, S3Client
