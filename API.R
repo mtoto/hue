@@ -23,7 +23,7 @@ predict_hue <- function(timestamp){
         if (pred=="zero") {
                 x <- 0
         } else {
-                x <- for_sample %>% filter(y == pred & hour == lubridate::hour(timestamp)) %>%
+                x <- median_values %>% filter(y == pred & hour == lubridate::hour(timestamp)) %>%
                 select(med) %>% unlist()
         }
         

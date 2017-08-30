@@ -86,9 +86,9 @@ run_model_save_data <- function(...){
                   object = paste0("gbmFit_",Sys.Date(),".rds")
         )
         
-        s3saveRDS(median_sample, 
+        s3saveRDS(median_values, 
                   bucket = "ams-hue-data", 
-                  object = paste0("median_sample_",Sys.Date(),".rds")
+                  object = paste0("median_values_",Sys.Date(),".rds")
         )
 }
 
