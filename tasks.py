@@ -65,8 +65,7 @@ class hue_run_save_model(luigi.Task):
     def output(self):
         client = S3Client(host = 's3.us-east-2.amazonaws.com')
         return S3Target('s3://ams-hue-data/gbmFit_%s.rds' % 
-                        self.date.strftime(
-                '%Y-%m-%d'), 
+                        self.date.strftime('%Y-%m-%d'), 
                         client=client)
     
         return S3Target('s3://ams-hue-data/for_sample_%s.rds' % 

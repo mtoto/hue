@@ -1,5 +1,6 @@
 # functions
-add_vars <- function(df, extra_var = "yes") {
+add_vars <- function(df, extra_var = "nos") {
+        
         if (extra_var == "yes") {
                 df1 <- df %>% select(log_time, y) %>% 
                         mutate(y = factor(y, levels = c("dim","mid","bright", "zero")))
