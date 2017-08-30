@@ -39,7 +39,7 @@ run_model_save_data <- function(...){
         binned_df <- binned_df %>% filter(!as.Date(log_time) %in% off_days$date)
         
         # for predictions
-        for_sample <- binned_df %>% filter(bri > 0) %>% 
+        median_values <- binned_df %>% filter(bri > 0) %>% 
                 mutate(hour = lubridate::hour(as.POSIXct(log_time, tz = "Europe/Amsterdam"))) %>%
                 select(hour,bri, y) %>% 
                 group_by(y, hour) %>%
@@ -86,9 +86,9 @@ run_model_save_data <- function(...){
                   object = paste0("gbmFit_",Sys.Date(),".rds")
         )
         
-        s3saveRDS(for_sample, 
+        s3saveRDS(median_sample, 
                   bucket = "ams-hue-data", 
-                  object = paste0("for_sample_",Sys.Date(),".rds")
+                  object = paste0("median_sample_",Sys.Date(),".rds")
         )
 }
 
