@@ -83,12 +83,12 @@ run_model_save_data <- function(...){
         print("modeling finished, saving objects to S3")
         s3saveRDS(gbmFit, 
                   bucket = "ams-hue-data", 
-                  object = paste0("gbmFit_",Sys.Date(),".rds")
+                  object = paste0("gbmFit_",gsub("\\-",x=Sys.Date(), ""),".rds")
         )
         
         s3saveRDS(median_values, 
                   bucket = "ams-hue-data", 
-                  object = paste0("median_values_",Sys.Date(),".rds")
+                  object = paste0("median_values_",gsub("\\-",x=Sys.Date(), ""),".rds")
         )
 }
 

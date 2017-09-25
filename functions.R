@@ -31,3 +31,21 @@ add_vars <- function(df, extra_var = "nos") {
                                                 ifelse(time_of_day=="evening", mins_passed - 1080, mins_passed)))) %>% 
                 select(-mins_passed, -hour) # logtime taken out
 }
+
+# predict function, assumes objects in memory
+predict_hue <- function(timestamp){
+        
+        df <- data.frame(log_time =as.POSIXct(timestamp)) %>% 
+                add_vars(extra_var = "no")
+        
+        pred <- predict(gbmFit, newdata = df)
+        
+        if (pred=="zero") {
+                x <- 0
+        } else {
+                x <- median_values %>% filter(y == pred & hour == lubridate::hour(timestamp)) %>%
+                        select(med) %>% unlist()
+        }
+        
+        return(x)
+}
